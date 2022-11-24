@@ -99,12 +99,6 @@ func JobJson(c *gin.Context) {
 	c.JSON(200, jobrunner.StatusJson())
 }
 
-func JobHtml(c *gin.Context) {
-	// Returns the template data pre-parsed
-	c.HTML(200, "", jobrunner.StatusPage())
-
-}
-
 ```
 
 #### Get job execution result through go channel
