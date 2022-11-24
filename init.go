@@ -45,9 +45,15 @@ func isSelfConcurrent(cocnurrencyFlag int) {
 }
 
 func Start(loc *time.Location, v ...int) {
-	MainCron = cron.New(cron.WithLocation(loc), cron.WithParser(cron.NewParser(
-		cron.SecondOptional|cron.Minute|cron.Hour|cron.Dom|cron.Month|cron.Dow|cron.Descriptor,
-	)))
+	if loc == nil {
+		MainCron = cron.New(cron.WithParser(cron.NewParser(
+			cron.SecondOptional | cron.Minute | cron.Hour | cron.Dom | cron.Month | cron.Dow | cron.Descriptor,
+		)))
+	} else {
+		MainCron = cron.New(cron.WithLocation(loc), cron.WithParser(cron.NewParser(
+			cron.SecondOptional|cron.Minute|cron.Hour|cron.Dom|cron.Month|cron.Dow|cron.Descriptor,
+		)))
+	}
 
 	for i, option := range v {
 		functions[i].(func(int))(option)
