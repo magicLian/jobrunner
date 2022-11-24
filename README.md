@@ -118,7 +118,7 @@ func main() {
 
 	for {
 		select {
-		case record := <-jobrunner.JobsExecutionChan:
+		case record := <-jobrunner.JobsExecutionStatusChan:
 			fmt.Printf("Job exection status result:[%v]", record)
 		}
 	}
