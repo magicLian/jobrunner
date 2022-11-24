@@ -1,4 +1,6 @@
-# ![](https://raw.githubusercontent.com/bamzi/jobrunner/master/views/runclock.jpg) JobRunner
+# ![](https://raw.githubusercontent.com/magicLian/jobrunner/master/views/runclock.jpg) JobRunner
+
+This Repo is forked from ```github.com/magicLian/jobrunner``` 
 
 JobRunner is framework for performing work asynchronously, outside of the request flow. It comes with cron to schedule and queue job functions for processing at specified time. 
 
@@ -6,16 +8,20 @@ It includes a live monitoring of current schedule and state of active jobs that 
 
 ## Install
 
-`go get github.com/bamzi/jobrunner`
+`go get github.com/magicLian/jobrunner`
 
 ### Setup
 
 ```go
 package main
 
-import "github.com/bamzi/jobrunner"
+import "github.com/magicLian/jobrunner"
 
 func main() {
+    loc,err := time.loadLocation("Asia/Tykyo")
+    if err != nil {
+        Panic(err)
+    }
     jobrunner.Start() // optional: jobrunner.Start(pool int, concurrent int) (10, 1)
     jobrunner.Schedule("@every 5s", ReminderEmails{})
 }
@@ -34,7 +40,7 @@ func (e ReminderEmails) Run() {
 ```
 
 ### Live Monitoring
-![](https://raw.githubusercontent.com/bamzi/jobrunner/master/views/jobrunner-html.png)
+![](https://raw.githubusercontent.com/magicLian/jobrunner/master/views/jobrunner-html.png)
 ```go
 
 // Example of GIN micro framework
@@ -45,7 +51,7 @@ func main() {
     routes.GET("/jobrunner/json", JobJson)
 
     // Load template file location relative to the current working directory
-    routes.LoadHTMLGlob("../github.com/bamzi/jobrunner/views/Status.html")
+    routes.LoadHTMLGlob("../github.com/magicLian/jobrunner/views/Status.html")
 
     // Returns html page at given endpoint based on the loaded
     // template from above
@@ -66,18 +72,10 @@ func JobHtml(c *gin.Context) {
 }
 
 ```
-## WHY?
-To reduce our http response latency by 200+%
-
-JobRunner was created to help us process functions unrelated to response without any delays to the http response. GoRoutines would timeout because response has already been processed, closing the instance window all together. 
-
-Instead of creating a separate independent app, we wanted to save time and manageability of our current app by coupling-in the job processing. We did not want to have micro services. It's premature optimization.
-
-If you have a web app or api service backend and want a job processing framework built into your app then JobRunner is for you. Once you hit mass growth and need to scale, you can simply decouple you JobRunners into a dedicated app.
-
 ## Use cases
 Here are some examples of what we use JobRunner for:
-
+* Add time location support
+* Add user-defined job name support
 * Send emails to new users after signup
 * Sending push notification or emails based on specifics
 * ReMarketing Engine - send invites, reminder emails, etc ...
@@ -101,11 +99,6 @@ JobRunner is designed to be framework agnostic. So it will work with pure Go app
 *Verified Supported Frameworks*
 
 * Gin
-* Echo
-* Martini
-* Beego
-* Revel (JobRunner is modified version of revel's Jobs module)
-* ...
 
 **Examples & recipes are coming soon**
 

@@ -20,37 +20,36 @@ import (
 // (Copying the type to this package makes it more visible)
 //
 // For example:
-//    jobrunner.Schedule("cron.frequent", jobs.Func(myFunc))
+//    jobrunner.Schedule("cron.frequent", jobs.Func(myFunc), "myFunc")
 type Func func()
 
 func (r Func) Run() { r() }
 
-func Schedule(spec string, job cron.Job) error {
+func Schedule(spec string, job cron.Job, n string) error {
 	sched, err := cron.ParseStandard(spec)
 	if err != nil {
 		return err
 	}
-	MainCron.Schedule(sched, New(job))
+	MainCron.Schedule(sched, New(job, n))
 	return nil
 }
 
 // Run the given job at a fixed interval.
 // The interval provided is the time between the job ending and the job being run again.
 // The time that the job takes to run is not included in the interval.
-func Every(duration time.Duration, job cron.Job) {
-
-	MainCron.Schedule(cron.Every(duration), New(job))
+func Every(duration time.Duration, job cron.Job, n string) {
+	MainCron.Schedule(cron.Every(duration), New(job, n))
 }
 
 // Run the given job right now.
-func Now(job cron.Job) {
-	go New(job).Run()
+func Now(job cron.Job, n string) {
+	go New(job, n).Run()
 }
 
 // Run the given job once, after the given delay.
-func In(duration time.Duration, job cron.Job) {
+func In(duration time.Duration, job cron.Job, n string) {
 	go func() {
 		time.Sleep(duration)
-		New(job).Run()
+		New(job, n).Run()
 	}()
 }

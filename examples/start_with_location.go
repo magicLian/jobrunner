@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/magiclian/jobrunner"
+	"github.com/magicLian/jobrunner"
 	"github.com/sirupsen/logrus"
 )
 
@@ -15,7 +15,7 @@ func StartWithLocation() {
 	}
 
 	jobrunner.Start(loc)
-	jobrunner.Schedule("@every 5s", ReminderEmails{})
+	jobrunner.Schedule("@every 5s", ReminderEmails{}, "ReminderEmails")
 }
 
 // Job Specific Functions
