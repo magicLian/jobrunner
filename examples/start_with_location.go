@@ -1,6 +1,7 @@
 package examples
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/magiclian/jobrunner"
@@ -14,4 +15,17 @@ func StartWithLocation() {
 	}
 
 	jobrunner.Start(loc)
+	jobrunner.Schedule("@every 5s", ReminderEmails{})
+}
+
+// Job Specific Functions
+type ReminderEmails struct {
+	// filtered
+}
+
+// ReminderEmails.Run() will get triggered automatically.
+func (e ReminderEmails) Run() {
+	// Queries the DB
+	// Sends some email
+	fmt.Printf("Every 5 sec send reminder emails \n")
 }
