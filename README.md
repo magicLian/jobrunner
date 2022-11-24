@@ -110,6 +110,22 @@ func JobHtml(c *gin.Context) {
 #### Get job execution result through go channel
 ```go
 
+func main() {
+	...
+	
+	jobrunner.Start(nil)
+	jobrunner.Every(10*time.Minute, DoSomeThing{}, "DoSomeThing")
+
+	for {
+		select {
+		case record := <-jobrunner.JobsExecutionChan:
+			fmt.Printf("Job exection status result:[%v]", record)
+		}
+	}
+
+
+	...
+}
 
 ```
 
