@@ -123,6 +123,8 @@ func main() {
 
 ```
 
+### Live Monitoring
+![](https://raw.githubusercontent.com/magicLian/jobrunner/master/views/jobrunner-html.png)
 
 
 ## Credits
