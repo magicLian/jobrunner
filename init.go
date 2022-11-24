@@ -18,6 +18,8 @@ var (
 
 	// Is a single job allowed to run concurrently with itself?
 	selfConcurrent bool
+
+	JobsExecutionStatusChan chan *JobStatus
 )
 
 var (

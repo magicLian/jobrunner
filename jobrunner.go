@@ -2,6 +2,7 @@ package jobrunner
 
 import (
 	"bytes"
+	"fmt"
 	"log"
 	"reflect"
 	"runtime/debug"
@@ -12,6 +13,8 @@ import (
 	"github.com/robfig/cron/v3"
 )
 
+const UNNAMED = "(unnamed)"
+
 type Job struct {
 	Name    string
 	inner   cron.Job
@@ -21,7 +24,16 @@ type Job struct {
 	running sync.Mutex
 }
 
-const UNNAMED = "(unnamed)"
+type JobStatus struct {
+	Name      string
+	Status    string
+	StartTime time.Time
+	EndTime   time.Time
+}
+
+func (js *JobStatus) ToString() {
+	fmt.Printf("Name: %s, createTime: %s, endTime: %s", js.Name, js.StartTime.String(), js.EndTime.String())
+}
 
 func New(job cron.Job, n string) *Job {
 	name := UNNAMED
@@ -83,4 +95,9 @@ func (j *Job) Run() {
 	end := time.Now()
 	j.Latency = end.Sub(start).String()
 
+	JobsExecutionStatusChan <- &JobStatus{
+		Name:      j.Name,
+		StartTime: start,
+		EndTime:   end,
+	}
 }
