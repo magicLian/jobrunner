@@ -20,6 +20,9 @@ It includes a live monitoring of current schedule and state of active jobs that 
 * Support task status real-time query 
 * Support to obtain task execution history status through Go `channel`
 
+### Live Monitoring
+![](https://raw.githubusercontent.com/magicLian/jobrunner/master/views/jobrunner-html.png)
+
 ## Basics
 
 ```go
@@ -122,10 +125,6 @@ func main() {
 }
 
 ```
-
-### Live Monitoring
-![](https://raw.githubusercontent.com/magicLian/jobrunner/master/views/jobrunner-html.png)
-
 
 ## Credits
 - [revel jobs module](https://github.com/revel/modules/tree/master/jobs) - Origin of JobRunner
