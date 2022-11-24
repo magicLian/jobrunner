@@ -1,10 +1,12 @@
 # ![](https://raw.githubusercontent.com/magicLian/jobrunner/master/views/runclock.jpg) JobRunner
 
-This Repo is forked from ```github.com/magicLian/jobrunner``` 
+##### This Repo is forked from ```github.com/bamzi/jobrunner```
+
+※This is an enhanced version※
 
 JobRunner is framework for performing work asynchronously, outside of the request flow. It comes with cron to schedule and queue job functions for processing at specified time. 
 
-It includes a live monitoring of current schedule and state of active jobs that can be outputed as JSON or Html template. 
+It includes a live monitoring of current schedule and state of active jobs that can be outputed as JSON and it support get job execution history by go channel. 
 
 ## Install
 
@@ -12,6 +14,7 @@ It includes a live monitoring of current schedule and state of active jobs that 
 
 ### Setup
 
+#### standalone
 ```go
 package main
 
@@ -22,8 +25,8 @@ func main() {
     if err != nil {
         Panic(err)
     }
-    jobrunner.Start() // optional: jobrunner.Start(pool int, concurrent int) (10, 1)
-    jobrunner.Schedule("@every 5s", ReminderEmails{})
+    jobrunner.Start(loc)
+    jobrunner.Schedule("@every 5s", ReminderEmails{}, "reminderEmails")
 }
 
 // Job Specific Functions
@@ -39,68 +42,64 @@ func (e ReminderEmails) Run() {
 }
 ```
 
-### Live Monitoring
-![](https://raw.githubusercontent.com/magicLian/jobrunner/master/views/jobrunner-html.png)
+#### Integrate with Gin
 ```go
 
-// Example of GIN micro framework
+package main
+
+import (
+	"fmt"
+	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/magicLian/jobrunner"
+)
+
 func main() {
-    routes := gin.Default()
+	routes := gin.Default()
 
-    // Resource to return the JSON data
-    routes.GET("/jobrunner/json", JobJson)
+	// Resource to return the JSON data
+	routes.GET("/jobrunner/json", JobJson)
 
-    // Load template file location relative to the current working directory
-    routes.LoadHTMLGlob("../github.com/magicLian/jobrunner/views/Status.html")
+	jobrunner.Start(nil)
+	jobrunner.Every(10*time.Minute, DoSomeThing{}, "DoSomeThing")
 
-    // Returns html page at given endpoint based on the loaded
-    // template from above
-    routes.GET("/jobrunner/html", JobHtml)
+	routes.Run(":8080")
+}
 
-    routes.Run(":8080")
+type DoSomeThing struct {
+}
+
+func (d DoSomeThing) Run() {
+	fmt.Printf("Start to do something")
 }
 
 func JobJson(c *gin.Context) {
-    // returns a map[string]interface{} that can be marshalled as JSON
-    c.JSON(200, jobrunner.StatusJson())
+	// returns a map[string]interface{} that can be marshalled as JSON
+	c.JSON(200, jobrunner.StatusJson())
 }
 
 func JobHtml(c *gin.Context) {
-    // Returns the template data pre-parsed
-    c.HTML(200, "", jobrunner.StatusPage())
+	// Returns the template data pre-parsed
+	c.HTML(200, "", jobrunner.StatusPage())
 
 }
 
 ```
-## Use cases
-Here are some examples of what we use JobRunner for:
-* Add time location support
-* Add user-defined job name support
-* Send emails to new users after signup
-* Sending push notification or emails based on specifics
-* ReMarketing Engine - send invites, reminder emails, etc ...
-* Clean DB, data or AMZ S3
-* Sending Server stats to monitoring apps
-* Send data stats at daily or weekly intervals
+
+#### Get job execution result through go channel
+```go
+
+
+```
 
 ### Supported Featured
 *All jobs are processed outside of the request flow*
 
-* Now: process a job immediately
-* In: processing a job one time, after a given time
-* Every: process a recurring job after every given time gap
-* Schedule: process a job (recurring or otherwise) at a given time
-
-
-## Compatibility
-
-JobRunner is designed to be framework agnostic. So it will work with pure Go apps as well as any framework written in Go Language. 
-
-*Verified Supported Frameworks*
-
-* Gin
-
-**Examples & recipes are coming soon**
+* Support time location in scheduling job
+* Support user-deined job name
+* Support task status real-time query 
+* Support to obtain task execution history status through Go `channel`
 
 ## Basics
 
@@ -114,24 +113,9 @@ JobRunner is designed to be framework agnostic. So it will work with pure Go app
 ```
 [**More Detailed CRON Specs**](https://github.com/robfig/cron/blob/v2/doc.go)
 
-## Contribute
-
-**Use issues for everything**
-
-- Report problems
-- Discuss before sending pull request
-- Suggest new features
-- Improve/fix documentation
-
 ## Credits
 - [revel jobs module](https://github.com/revel/modules/tree/master/jobs) - Origin of JobRunner
 - [robfig cron v3](https://github.com/robfig/cron/tree/v3) - github.com/robfig/cron/v3
-- [contributors](https://github.com/bamzi/jobrunner/graphs/contributors)
-
-### Author 
-**Bam Azizi**
-Github: [@bamzi](https://github.com/bamzi)
-Twitter: [@bamazizi](https://twitter/bamazizi)
 
 #### License
 MIT
