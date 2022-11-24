@@ -12,6 +12,26 @@ It includes a live monitoring of current schedule and state of active jobs that 
 
 `go get github.com/magicLian/jobrunner`
 
+### Supported Featured
+*All jobs are processed outside of the request flow*
+
+* Support time location in scheduling job
+* Support user-deined job name
+* Support task status real-time query 
+* Support to obtain task execution history status through Go `channel`
+
+## Basics
+
+```go
+    jobrunner.Schedule("* */5 * * * *", DoSomething{}, "DoSomethingJob") // every 5min do something
+    jobrunner.Schedule("@every 1h30m10s", ReminderEmails{}, "ReminderEmailsJob")
+    jobrunner.Schedule("@midnight", DataStats{}, "DataStatsJob") // every midnight do this..
+    jobrunner.Every(16*time.Minute, CleanS3{}, "CleanS3Job") // evey 16 min clean...
+    jobrunner.In(10*time.Second, WelcomeEmail{}, "WelcomeEmailJob") // one time job. starts after 10sec
+    jobrunner.Now(NowDo{}, "NowJob") // do the job as soon as it's triggered
+```
+[**More Detailed CRON Specs**](https://github.com/robfig/cron/blob/v2/doc.go)
+
 ### Setup
 
 #### standalone
@@ -93,25 +113,7 @@ func JobHtml(c *gin.Context) {
 
 ```
 
-### Supported Featured
-*All jobs are processed outside of the request flow*
 
-* Support time location in scheduling job
-* Support user-deined job name
-* Support task status real-time query 
-* Support to obtain task execution history status through Go `channel`
-
-## Basics
-
-```go
-    jobrunner.Schedule("* */5 * * * *", DoSomething{}) // every 5min do something
-    jobrunner.Schedule("@every 1h30m10s", ReminderEmails{})
-    jobrunner.Schedule("@midnight", DataStats{}) // every midnight do this..
-    jobrunner.Every(16*time.Minute, CleanS3{}) // evey 16 min clean...
-    jobrunner.In(10*time.Second, WelcomeEmail{}) // one time job. starts after 10sec
-    jobrunner.Now(NowDo{}) // do the job as soon as it's triggered
-```
-[**More Detailed CRON Specs**](https://github.com/robfig/cron/blob/v2/doc.go)
 
 ## Credits
 - [revel jobs module](https://github.com/revel/modules/tree/master/jobs) - Origin of JobRunner
