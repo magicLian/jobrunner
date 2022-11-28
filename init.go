@@ -61,6 +61,8 @@ func Start(loc *time.Location, v ...int) {
 		functions[i].(func(int))(option)
 	}
 
+	JobsExecutionStatusChan = make(chan *JobStatus)
+
 	MainCron.Start()
 
 	fmt.Printf("%s[JobRunner] %v Started... %s \n",
