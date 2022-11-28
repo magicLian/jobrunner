@@ -31,8 +31,8 @@ type JobStatus struct {
 	EndTime   time.Time
 }
 
-func (js *JobStatus) ToString() {
-	fmt.Printf("Name: %s, createTime: %s, endTime: %s", js.Name, js.StartTime.String(), js.EndTime.String())
+func (js *JobStatus) String() {
+	fmt.Printf("[Name: %s, createTime: %s, endTime: %s\n]", js.Name, js.StartTime.Format(time.RFC3339), js.EndTime.Format(time.RFC3339))
 }
 
 func New(job cron.Job, n string) *Job {
