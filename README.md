@@ -44,9 +44,12 @@ package main
 import "github.com/magicLian/jobrunner"
 
 func main() {
-    loc,err := time.loadLocation("Asia/Tykyo")
+    if err := os.Setenv("ZONEINFO", "/tzdata/data.zip"); err != nil {
+	panic(err)
+    }
+    loc,err := time.loadLocation("Asia/Tokyo")
     if err != nil {
-        Panic(err)
+        panic(err)
     }
     jobrunner.Start(loc)
     jobrunner.Schedule("@every 5s", ReminderEmails{}, "reminderEmails")
