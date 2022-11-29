@@ -114,17 +114,22 @@ func main() {
 	...
 	
 	jobrunner.Start(nil)
+	go getCronExecutionResults()
 	jobrunner.Every(10*time.Minute, DoSomeThing{}, "DoSomeThing")
 
+	
+
+
+	...
+}
+
+func getCronExecutionResults(){
 	for {
 		select {
 		case record := <-jobrunner.JobsExecutionStatusChan:
 			fmt.Printf("Job exection status result:[%v]", record)
 		}
 	}
-
-
-	...
 }
 
 ```
