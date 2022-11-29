@@ -16,9 +16,9 @@ It includes a live monitoring of current schedule and state of active jobs that 
 *All jobs are processed outside of the request flow*
 
 * Support time location in scheduling job
-* Support user-deined job name
+* Support user-defined job name
 * Support task status real-time query 
-* Support to obtain task execution history status through Go `channel`
+* Support to obtain task execution history records through Go `channel`
 
 ### Live Monitoring
 ![](https://raw.githubusercontent.com/magicLian/jobrunner/master/views/jobrunner-html.png)
