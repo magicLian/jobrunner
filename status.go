@@ -20,25 +20,16 @@ func Entries() []cron.Entry {
 }
 
 func StatusPage() []StatusData {
-
 	ents := MainCron.Entries()
-
-	Statuses := make([]StatusData, len(ents))
+	statuses := make([]StatusData, len(ents))
+	
 	for k, v := range ents {
-		Statuses[k].Id = v.ID
-		Statuses[k].JobRunner = AddJob(v.Job)
-		Statuses[k].Next = v.Next
-		Statuses[k].Prev = v.Prev
-
+		statuses[k].Id = v.ID
+		statuses[k].JobRunner = AddJob(v.Job)
+		statuses[k].Next = v.Next
+		statuses[k].Prev = v.Prev
 	}
-
-	// t := template.New("status_page")
-
-	// var data bytes.Buffer
-	// t, _ = t.ParseFiles("views/Status.html")
-
-	// t.ExecuteTemplate(&data, "status_page", Statuses())
-	return Statuses
+	return statuses
 }
 
 func StatusJson() map[string]interface{} {
