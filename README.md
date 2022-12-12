@@ -87,7 +87,7 @@ func main() {
 	// Resource to return the JSON data
 	routes.GET("/jobrunner/json", JobJson)
 
-	jobrunner.Start(nil, false))
+	jobrunner.Start(nil, false)
 	jobrunner.Every(10*time.Minute, DoSomeThing{}, "DoSomeThing")
 
 	routes.Run(":8080")
