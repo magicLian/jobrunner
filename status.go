@@ -22,7 +22,7 @@ func Entries() []cron.Entry {
 func StatusPage() []StatusData {
 	ents := MainCron.Entries()
 	statuses := make([]StatusData, len(ents))
-	
+
 	for k, v := range ents {
 		statuses[k].Id = v.ID
 		statuses[k].JobRunner = AddJob(v.Job)
@@ -33,11 +33,9 @@ func StatusPage() []StatusData {
 }
 
 func StatusJson() map[string]interface{} {
-
 	return map[string]interface{}{
 		"jobrunner": StatusPage(),
 	}
-
 }
 
 func AddJob(job cron.Job) *Job {

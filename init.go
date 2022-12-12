@@ -19,6 +19,7 @@ var (
 	// Is a single job allowed to run concurrently with itself?
 	selfConcurrent bool
 
+	IsStoreExecutionStatus  bool
 	JobsExecutionStatusChan chan *JobStatus
 )
 
@@ -46,7 +47,7 @@ func isSelfConcurrent(cocnurrencyFlag int) {
 	}
 }
 
-func Start(loc *time.Location, v ...int) {
+func Start(loc *time.Location, isStoreExecutionStatus bool, v ...int) {
 	if loc == nil {
 		MainCron = cron.New(cron.WithParser(cron.NewParser(
 			cron.SecondOptional | cron.Minute | cron.Hour | cron.Dom | cron.Month | cron.Dow | cron.Descriptor,
@@ -61,7 +62,10 @@ func Start(loc *time.Location, v ...int) {
 		functions[i].(func(int))(option)
 	}
 
-	JobsExecutionStatusChan = make(chan *JobStatus)
+	IsStoreExecutionStatus = isStoreExecutionStatus
+	if IsStoreExecutionStatus {
+		JobsExecutionStatusChan = make(chan *JobStatus)
+	}
 
 	MainCron.Start()
 

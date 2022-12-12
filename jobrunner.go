@@ -95,9 +95,11 @@ func (j *Job) Run() {
 	end := time.Now()
 	j.Latency = end.Sub(start).String()
 
-	JobsExecutionStatusChan <- &JobStatus{
-		Name:      j.Name,
-		StartTime: start,
-		EndTime:   end,
+	if IsStoreExecutionStatus {
+		JobsExecutionStatusChan <- &JobStatus{
+			Name:      j.Name,
+			StartTime: start,
+			EndTime:   end,
+		}
 	}
 }
