@@ -51,7 +51,7 @@ func main() {
     if err != nil {
         panic(err)
     }
-    jobrunner.Start(loc)
+    jobrunner.Start(loc, false)
     jobrunner.Schedule("@every 5s", ReminderEmails{}, "reminderEmails")
 }
 
@@ -87,7 +87,7 @@ func main() {
 	// Resource to return the JSON data
 	routes.GET("/jobrunner/json", JobJson)
 
-	jobrunner.Start(nil)
+	jobrunner.Start(nil, false))
 	jobrunner.Every(10*time.Minute, DoSomeThing{}, "DoSomeThing")
 
 	routes.Run(":8080")
@@ -113,7 +113,7 @@ func JobJson(c *gin.Context) {
 func main() {
 	...
 	
-	jobrunner.Start(nil)
+	jobrunner.Start(nil, true)
 	go getCronExecutionResults()
 	jobrunner.Every(10*time.Minute, DoSomeThing{}, "DoSomeThing")
 
