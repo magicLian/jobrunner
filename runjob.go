@@ -26,7 +26,9 @@ type Func func()
 func (r Func) Run() { r() }
 
 func Schedule(spec string, job cron.Job, n string) error {
-	sched, err := cron.ParseStandard(spec)
+	parser := cron.NewParser(cron.SecondOptional | cron.Minute | cron.Hour | cron.Dom | cron.Month | cron.Dow | cron.Descriptor)
+
+	sched, err := parser.Parse(spec)
 	if err != nil {
 		return err
 	}
